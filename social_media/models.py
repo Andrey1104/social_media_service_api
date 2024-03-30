@@ -95,8 +95,13 @@ class Event(models.Model):
     participant = models.ForeignKey(
         AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="messages",
+        related_name="events",
     )
     start_date = models.DateTimeField()
     end_date = models.DateTimeField(null=True, blank=True)
 
+    class Meta:
+        ordering = ("-start_date",)
+
+    def __str__(self) -> str:
+        return f"{self.title} ({self.description})"
