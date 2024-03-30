@@ -156,3 +156,6 @@ SIMPLE_JWT = {
     "REFRESH_TOKEN_LIFETIME": timedelta(days=365),
     "ROTATE_REFRESH_TOKENS": False,
 }
+
+AUTH_USER_MODEL = "user.User"
+PASSWORD_LENGTH = 5
