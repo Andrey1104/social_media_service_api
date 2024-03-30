@@ -47,6 +47,7 @@ class User(AbstractUser):
     email = models.EmailField(_("email address"), unique=True)
     avatar = models.ImageField(null=True, upload_to=image_file_path)
     status = models.TextField(null=True, blank=True)
+    is_premium = models.BooleanField(default=False)
 
     USERNAME_FIELD = "email"
     REQUIRED_FIELDS = []

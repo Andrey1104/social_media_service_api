@@ -1,7 +1,7 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from social_media.models import FollowGroup
+from social_media.models import Follower
 from social_media.serializers import FollowerListSerializer
 
 from social_media_service.settings import PASSWORD_LENGTH
@@ -18,7 +18,7 @@ class UserSerializer(serializers.ModelSerializer):
 
     @staticmethod
     def get_followers(user):
-        followers = FollowGroup.objects.filter(user=user)
+        followers = Follower.objects.filter(user=user)
         return FollowerListSerializer(followers, many=True).data
 
     def create(self, validated_data):
