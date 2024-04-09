@@ -35,7 +35,7 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ("id", "first_name", "last_name", "email", "followers", "messages", "status", "is_premium")
+        fields = ("id", "first_name", "last_name", "email", "followers", "messages", "status", "is_premium", "avatar")
         read_only_fields = ("is_staff", "followers", "messages", "is_premium")
 
     @staticmethod
@@ -52,10 +52,10 @@ class UserDetailSerializer(serializers.ModelSerializer):
 class UserListSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ("id", "email", "first_name", "last_name")
+        fields = ("id", "email", "first_name", "last_name", "avatar")
 
 
 class UserImageSerializer(serializers.ModelSerializer):
     class Meta:
         model = get_user_model()
-        fields = ("id", "image")
+        fields = ("id", "avatar")
