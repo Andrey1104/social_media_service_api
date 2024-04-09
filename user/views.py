@@ -24,7 +24,6 @@ class CreateUserView(generics.CreateAPIView):
 
 class ManageUserView(RetrieveUpdateDestroyAPIView):
     serializer_class = UserDetailSerializer
-    authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get_object(self):
@@ -34,6 +33,7 @@ class ManageUserView(RetrieveUpdateDestroyAPIView):
 class UserListView(GenericViewSet, ListModelMixin,):
     queryset = User.objects.all()
     serializer_class = UserListSerializer
+    permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
         """Retrieve users with filters"""
@@ -70,7 +70,6 @@ class UserListView(GenericViewSet, ListModelMixin,):
 
 class UserImageView(UpdateAPIView):
     serializer_class = UserImageSerializer
-    authentication_classes = (JWTAuthentication,)
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
