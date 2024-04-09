@@ -1,25 +1,18 @@
 from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
-from social_media.models import Follower
-from social_media.serializers import FollowerListSerializer
+from social_media.models import Follower, Message
+from social_media.serializers import FollowerListSerializer, MessageListSerializer
 
 from social_media_service.settings import PASSWORD_LENGTH
 
 
 class UserSerializer(serializers.ModelSerializer):
-    followers = serializers.SerializerMethodField()
-
     class Meta:
         model = get_user_model()
-        fields = ("id", "first_name", "last_name", "email", "is_staff", "followers", "avatar", "status")
-        read_only_fields = ("is_staff", "followers")
+        fields = ("id", "email", "password", "is_staff")
+        read_only_fields = ("is_staff",)
         extra_kwargs = {"password": {"write_only": True, "min_length": PASSWORD_LENGTH}}
-
-    @staticmethod
-    def get_followers(user):
-        followers = Follower.objects.filter(user=user)
-        return FollowerListSerializer(followers, many=True).data
 
     def create(self, validated_data):
         """Create a new user with encrypted password and return it"""
@@ -34,3 +27,35 @@ class UserSerializer(serializers.ModelSerializer):
             user.save()
 
         return user
+
+
+class UserDetailSerializer(serializers.ModelSerializer):
+    followers = serializers.SerializerMethodField()
+    messages = serializers.SerializerMethodField()
+
+    class Meta:
+        model = get_user_model()
+        fields = ("id", "first_name", "last_name", "email", "followers", "messages", "status", "is_premium")
+        read_only_fields = ("is_staff", "followers", "messages", "is_premium")
+
+    @staticmethod
+    def get_followers(user):
+        followers = Follower.objects.filter(user=user)
+        return FollowerListSerializer(followers, many=True).data
+
+    @staticmethod
+    def get_messages(user):
+        messages = Message.objects.filter(recipient=user)
+        return MessageListSerializer(messages, many=True).data
+
+
+class UserListSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ("id", "email", "first_name", "last_name")
+
+
+class UserImageSerializer(serializers.ModelSerializer):
+    class Meta:
+        model = get_user_model()
+        fields = ("id", "image")
