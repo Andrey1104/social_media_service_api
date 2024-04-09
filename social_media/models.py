@@ -40,7 +40,7 @@ class Comment(models.Model):
 
 
 class Like(models.Model):
-    who_liked = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
+    author = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
     post = models.ForeignKey(
         Post, related_name="likes", on_delete=models.CASCADE, null=True
     )
@@ -50,34 +50,34 @@ class Like(models.Model):
 
     class Meta:
         verbose_name_plural = "likes"
-        unique_together = ("who_liked", "post") or ("who_liked", "comment")
+        unique_together = ("author", "post") or ("author", "comment")
 
     def __str__(self) -> str:
-        return str(self.who_liked)
+        return str(self.author)
 
 
 class Follower(models.Model):
     user = models.ForeignKey(AUTH_USER_MODEL, on_delete=models.CASCADE)
-    follower = models.ForeignKey(
+    author = models.ForeignKey(
         AUTH_USER_MODEL, related_name="followers", on_delete=models.CASCADE
     )
 
     class Meta:
         verbose_name_plural = "followers"
-        unique_together = ("user", "follower")
+        unique_together = ("user", "author")
 
 
 class Message(models.Model):
     author = models.ForeignKey(
         AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="messages",
+        related_name="sent_messages",
     )
     text = models.TextField()
-    receiver = models.ForeignKey(
+    recipient = models.ForeignKey(
         AUTH_USER_MODEL,
         on_delete=models.CASCADE,
-        related_name="messages",
+        related_name="received_messages",
     )
     created_at = models.DateTimeField(auto_now_add=True)
     updated_at = models.DateTimeField(auto_now=True)

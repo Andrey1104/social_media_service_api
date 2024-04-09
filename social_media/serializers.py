@@ -6,13 +6,19 @@ from social_media.models import Post, Comment, Like, Follower, Message, Event
 class LikeSerializer(serializers.ModelSerializer):
     class Meta:
         model = Like
-        fields = ("id", "who_liked", "post", "comment")
+        fields = ("id", "post", "comment")
+
+
+class LikeListSerializer(LikeSerializer):
+    class Meta:
+        model = Like
+        fields = ("id", "author")
 
 
 class FollowerSerializer(serializers.ModelSerializer):
     class Meta:
         model = Follower
-        fields = ("id", "user", "follower")
+        fields = ("id", "user")
 
 
 class FollowerListSerializer(FollowerSerializer):
@@ -25,6 +31,7 @@ class FollowerListSerializer(FollowerSerializer):
 
 class PostSerializer(serializers.ModelSerializer):
     likes = serializers.SerializerMethodField()
+    comments = serializers.SerializerMethodField()
 
     class Meta:
         model = Post
@@ -32,23 +39,28 @@ class PostSerializer(serializers.ModelSerializer):
             "id",
             "title",
             "content",
+            "comments",
             "likes",
-            "author",
             "image",
             "created_at",
             "updated_at",
         )
 
     @staticmethod
-    def get_likes(post):
+    def get_likes(post) -> LikeSerializer:
         likes = Like.objects.filter(post=post)
-        return LikeSerializer(likes, many=True).data
+        return LikeListSerializer(likes, many=True).data
+
+    @staticmethod
+    def get_comments(post) -> LikeSerializer:
+        comments = Comment.objects.filter(post=post)
+        return CommentSerializer(comments, many=True).data
 
 
 class PostListSerializer(PostSerializer):
     class Meta:
         model = Post
-        fields = ("id", "title", "content", "image")
+        fields = ("id", "author", "title", "content", "image")
 
 
 class CommentSerializer(serializers.ModelSerializer):
@@ -60,16 +72,15 @@ class CommentSerializer(serializers.ModelSerializer):
             "id",
             "content",
             "post",
-            "author",
             "likes",
             "created_at",
             "updated_at",
         )
 
     @staticmethod
-    def get_likes(comment):
+    def get_likes(comment) -> LikeSerializer:
         likes = Like.objects.filter(comment=comment)
-        return LikeSerializer(likes, many=True).data
+        return LikeListSerializer(likes, many=True).data
 
 
 class EventSerializer(serializers.ModelSerializer):
@@ -81,4 +92,10 @@ class EventSerializer(serializers.ModelSerializer):
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ("id", "author", "text", "receiver", "created_at", "updated_at")
+        fields = ("id", "author", "text", "recipient", "created_at", "updated_at")
+
+
+class MessageListSerializer(MessageSerializer):
+    class Meta:
+        model = Message
+        fields = ("id", "author", "text")
