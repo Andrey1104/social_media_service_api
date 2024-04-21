@@ -11,7 +11,7 @@ services:
     command: >
       sh -c "python manage.py wait_for_db &&
             python manage.py migrate &&
-            python manage.py init_admin &&
+            python manage.py check_admin &&
             python manage.py runserver 0.0.0.0:9000"
     env_file:
       - .env
@@ -26,7 +26,7 @@ services:
       env_file:
           - .env
       volumes:
-          - my_db:$PGDATA
+          - ./data/db:$PGDATA
 
   redis:
     image: redis:alpine
