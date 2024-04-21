@@ -1,3 +1,4 @@
+from django.contrib.auth import get_user_model
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
 from rest_framework import status
@@ -12,7 +13,6 @@ from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
 
-from user.models import User
 from user.serializers import (
     UserSerializer,
     UserDetailSerializer,
@@ -34,7 +34,7 @@ class ManageUserView(RetrieveUpdateDestroyAPIView):
 
 
 class UserListView(GenericViewSet, ListModelMixin,):
-    queryset = User.objects.all()
+    queryset = get_user_model().objects.all()
     serializer_class = UserListSerializer
     permission_classes = (IsAuthenticated,)
 
@@ -76,7 +76,7 @@ class UserImageView(UpdateAPIView):
     permission_classes = (IsAuthenticated,)
 
     def get_queryset(self):
-        return User.objects.get(id=self.request.user.id)
+        return get_user_model().objects.get(id=self.request.user.id)
 
     def get_object(self):
         return self.request.user
@@ -91,8 +91,6 @@ class UserImageView(UpdateAPIView):
         user = self.get_object()
         serializer = self.get_serializer(user, data=request.data)
 
-        if serializer.is_valid():
-            serializer.save()
-            return Response(serializer.data, status=status.HTTP_200_OK)
-
-        return Response(serializer.errors, status=status.HTTP_400_BAD_REQUEST)
+        serializer.is_valid(raise_exception=True)
+        serializer.save()
+        return Response(serializer.data, status=status.HTTP_200_OK)
