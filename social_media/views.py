@@ -21,9 +21,6 @@ from social_media.serializers import (
 
 
 # TODO Users should be able to create new posts with text content
-#  and optional media attachments (e.g., images). (Adding images is optional task)
-#  Users should be able to retrieve their own posts and posts of users they are following.
-#  Users should be able to retrieve posts by hashtags or other criteria.
 #  Schedule Post creation using Celery (Optional):
 #  Add possibility to schedule Post creation (you can select the time to create the Post before creating of it).
 
