@@ -2,7 +2,10 @@ from django.contrib.auth import get_user_model
 from rest_framework import serializers
 
 from social_media.models import Follower, Message
-from social_media.serializers import FollowerListSerializer, MessageListSerializer
+from social_media.serializers import (
+    FollowerListSerializer,
+    MessageListSerializer
+)
 
 from social_media_service.settings import PASSWORD_LENGTH
 
@@ -12,7 +15,9 @@ class UserSerializer(serializers.ModelSerializer):
         model = get_user_model()
         fields = ("id", "email", "password", "is_staff")
         read_only_fields = ("is_staff",)
-        extra_kwargs = {"password": {"write_only": True, "min_length": PASSWORD_LENGTH}}
+        extra_kwargs = {
+            "password": {"write_only": True, "min_length": PASSWORD_LENGTH}
+        }
 
     def create(self, validated_data):
         """Create a new user with encrypted password and return it"""
@@ -35,16 +40,26 @@ class UserDetailSerializer(serializers.ModelSerializer):
 
     class Meta:
         model = get_user_model()
-        fields = ("id", "first_name", "last_name", "email", "followers", "messages", "status", "is_premium", "avatar")
+        fields = (
+            "id",
+            "first_name",
+            "last_name",
+            "email",
+            "followers",
+            "messages",
+            "status",
+            "is_premium",
+            "avatar"
+        )
         read_only_fields = ("is_staff", "followers", "messages", "is_premium")
 
     @staticmethod
-    def get_followers(user):
+    def get_followers(user) -> FollowerListSerializer:
         followers = Follower.objects.filter(user=user)
         return FollowerListSerializer(followers, many=True).data
 
     @staticmethod
-    def get_messages(user):
+    def get_messages(user) -> MessageListSerializer:
         messages = Message.objects.filter(recipient=user)
         return MessageListSerializer(messages, many=True).data
 

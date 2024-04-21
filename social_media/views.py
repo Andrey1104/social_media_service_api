@@ -24,7 +24,10 @@ class DestroyMixin(DestroyModelMixin):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
         if not request.user.is_superuser and instance.author != request.user:
-            raise PermissionDenied("You do not have permission to perform this action...")
+            raise PermissionDenied(
+                "You do not have permission "
+                "to perform this action..."
+            )
         self.perform_destroy(instance)
         return Response(status=status.HTTP_204_NO_CONTENT)
 

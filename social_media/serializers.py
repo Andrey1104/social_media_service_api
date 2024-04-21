@@ -86,13 +86,27 @@ class CommentSerializer(serializers.ModelSerializer):
 class EventSerializer(serializers.ModelSerializer):
     class Meta:
         model = Event
-        fields = ("id", "title", "description", "participant", "start_date", "end_date")
+        fields = (
+            "id",
+            "title",
+            "description",
+            "participant",
+            "start_date",
+            "end_date"
+        )
 
 
 class MessageSerializer(serializers.ModelSerializer):
     class Meta:
         model = Message
-        fields = ("id", "author", "text", "recipient", "created_at", "updated_at")
+        fields = (
+            "id",
+            "author",
+            "text",
+            "recipient",
+            "created_at",
+            "updated_at"
+        )
 
 
 class MessageListSerializer(MessageSerializer):
