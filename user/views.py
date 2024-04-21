@@ -1,13 +1,16 @@
 from drf_spectacular.types import OpenApiTypes
 from drf_spectacular.utils import OpenApiParameter, extend_schema
-from rest_framework import generics, status
+from rest_framework import status
 from rest_framework.decorators import action
-from rest_framework.generics import RetrieveUpdateDestroyAPIView, UpdateAPIView
+from rest_framework.generics import (
+    RetrieveUpdateDestroyAPIView,
+    UpdateAPIView,
+    CreateAPIView
+)
 from rest_framework.mixins import ListModelMixin
 from rest_framework.permissions import IsAuthenticated
 from rest_framework.response import Response
 from rest_framework.viewsets import GenericViewSet
-from rest_framework_simplejwt.authentication import JWTAuthentication
 
 from user.models import User
 from user.serializers import (
@@ -18,7 +21,7 @@ from user.serializers import (
 )
 
 
-class CreateUserView(generics.CreateAPIView):
+class CreateUserView(CreateAPIView):
     serializer_class = UserSerializer
 
 
