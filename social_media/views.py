@@ -20,11 +20,6 @@ from social_media.serializers import (
 )
 
 
-# TODO Users should be able to create new posts with text content
-#  Schedule Post creation using Celery (Optional):
-#  Add possibility to schedule Post creation (you can select the time to create the Post before creating of it).
-
-
 class DestroyMixin(DestroyModelMixin):
     def destroy(self, request, *args, **kwargs):
         instance = self.get_object()
