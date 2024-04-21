@@ -2,7 +2,7 @@ from django.urls import path
 from rest_framework_simplejwt.views import (
     TokenObtainPairView,
     TokenRefreshView,
-    TokenVerifyView,
+    TokenVerifyView, TokenBlacklistView,
 )
 
 from user.views import CreateUserView, ManageUserView, UserListView, UserImageView
@@ -17,4 +17,5 @@ urlpatterns = [
     path("me/", ManageUserView.as_view(), name="manage"),
     path("me/upload_image", UserImageView.as_view(), name="upload_image"),
     path("all/", UserListView.as_view({"get": "list"}), name="user_list"),
+    path("logout/", TokenBlacklistView.as_view(), name="token_blacklist"),
 ]
