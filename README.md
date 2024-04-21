@@ -36,8 +36,8 @@ JWT authentication (with logout function)
 Admin panel via /admin/
 Documentation via /api/doc/swagger/
 Extended profile system for users
-Likes, comments and following system
-CRUD operations for posts, comments, events
+Likes, comments, messages and following system
+CRUD operations for posts, comments, events and messages
 Upload media to post and user profile
 Retrieving posts by title, content and author
 Scheduled post creation
